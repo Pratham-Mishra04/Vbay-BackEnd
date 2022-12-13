@@ -18,10 +18,24 @@ export const getAllDocs = Model => catchAsync(async (req, res, next)=>{
     });
 })
 
+export const getAllDocsByQuery = (Model, query) => catchAsync(async (req, res, next)=>{
+    const userID=req.user.id;
+    const features = new APIFeatures(Model.find(query),req.query)
+
+    features.filter().sort().fields().paginator();
+
+    const docs = await features.query
+
+    res.status(200).json({
+        status: 'success',
+        results: docs.length,
+        requestedAt: req.requestedAt,
+        data: docs,
+    });
+})
+
 export const getAllDocsByUser = Model => catchAsync(async (req, res, next)=>{
-    const user = await User.findOne({id:req.user.id})
-    if(!user) return next(new AppError("No user of this username found", 401))
-    const userID=user.id;
+    const userID=req.user.id;
     const features = new APIFeatures(Model.find({user:userID}),req.query)
 
     features.filter().sort().fields().paginator();
@@ -68,7 +82,7 @@ export const createDoc = Model => catchAsync( async(req, res, next)=>{
     })
 })
 
-export const updateDoc = (Model, filteredBody)=> catchAsync(async (req, res, next)=>{
+export const updateDoc = Model=> catchAsync(async (req, res, next)=>{
     const doc= await Model.findByIdAndUpdate(req.params.id, req.body, {
         new:true,
         runValidators:true

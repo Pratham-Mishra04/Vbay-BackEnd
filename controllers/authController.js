@@ -4,6 +4,7 @@ import { promisify } from "util";
 import AppError from "../managers/AppError.js";
 import catchAsync from "../managers/catchAsync.js";
 import envHandler from "../managers/envHandler.js";
+import Item from "../models/itemModel.js";
 
 export const createSendToken = (user, statusCode, res)=>{
     const token=jwt.sign({ id:user._id }, envHandler("JWT_KEY"), {expiresIn: envHandler("JWT_TIME")*24*60})
@@ -55,11 +56,8 @@ export const protect = catchAsync(async (req, res, next)=>{
     if(!token) return next(new AppError("You are not Logged in. Please Login to continue", 401))
 
     const decoded= await promisify(jwt.verify)(token, envHandler("JWT_KEY"))
-
-    const user= await User.findById(decoded.id).populate({
-        path:"songs",
-        select:"name"
-    })
+    
+    const user= await User.findById(decoded.id)
 
     if(req.params.userID && decoded.id!=req.params.userID) return next(new AppError("Please Login in as the Modifying User.", 401))
 
@@ -89,6 +87,12 @@ export const restrictTo = (...roles) =>{
         next()
     } 
 }
+
+export const userItemProtect=catchAsync(async(req, res, next)=>{
+    const item= await Item.findById(req.params.id);
+    if(req.user.id!=item.listedBy) return next(AppError("You do not have the permission to perform this action", 403));
+    next()
+})
 
 export const adminOnly = (req, res, next)=>{
     if (!req.user.admin) return next(new AppError("You do not have the permission to perform this action", 403));
