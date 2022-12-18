@@ -1,10 +1,12 @@
 import express from "express";
-import { protect, userItemProtect } from "../Controllers/authController";
-import { addItem, deleteItem, updateItem } from "../controllers/itemController";
+import { protect, userItemProtect } from "../Controllers/authController.js";
+import { addItem, deleteBid, deleteItem, getAllItems, getItem, placeBid, updateItem } from "../controllers/itemController.js";
 
 const itemRouter= express.Router()
 
-itemRouter.post('/', protect, addItem)
-itemRouter.route('/:id').patch(protect, userItemProtect, updateItem).delete(protect, userItemProtect, deleteItem)
+itemRouter.route('/').get(protect, getAllItems).post(protect, addItem)
+itemRouter.route('/:id').get(protect, getItem).patch(protect, userItemProtect, updateItem).delete(protect, userItemProtect, deleteItem)
+
+itemRouter.route('/:id/bid/').post(protect, placeBid).delete(protect, deleteBid)
 
 export default itemRouter

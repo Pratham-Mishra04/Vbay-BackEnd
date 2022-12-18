@@ -20,13 +20,10 @@ const userSchema = new mongoose.Schema({
     profilePic:{
         type:String
     }, 
-    age:{
-        type:Number,
-        required:true
-    },
     phoneNo:{
         type:Number
     },
+    regno:String,
     username:{
         type:String,
         unique:true,

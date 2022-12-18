@@ -2,19 +2,22 @@ import mongoose from "mongoose";
 
 const itemSchema= new mongoose.Schema({
     title:String,
+    picture:String,
     description:String,
     listedBy:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User'
     },
-    listedAt:Date,
+    listedAt:{
+        type:Date,
+        default:Date.now()
+    },
     leastAsked:Number,
-    isPurchased:Boolean,
-    purchasedAt:Date,
-    bids:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'Bid'
-    }]
+    isPurchased:{
+        type:Boolean,
+        default:false
+    },
+    purchasedAt:Date
 })
 
 itemSchema.virtual('bids',{

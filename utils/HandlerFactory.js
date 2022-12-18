@@ -51,7 +51,7 @@ export const getAllDocsByUser = Model => catchAsync(async (req, res, next)=>{
 })
 
 export const getDoc = Model => catchAsync(async (req, res, next)=>{
-    const doc=await Model.findById(req.params.id);
+    const doc= (Model==User) ? await Model.findById(req.params.userID):await Model.findById(req.params.id);
     if(!doc) return next(new AppError("No document of this ID found", 401))
     res.status(200).json({
         status:"success",

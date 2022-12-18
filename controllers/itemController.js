@@ -1,7 +1,8 @@
 import catchAsync from "../managers/catchAsync.js";
 import Bid from "../models/bidModel.js";
-import Item from "../models/itemModel";
-import { updateDoc, deleteDoc, getAllDocsByQuery } from "../utils/HandlerFactory.js";
+import Item from "../models/itemModel.js";
+import APIFeatures from "../utils/APIFeatures.js";
+import { updateDoc, deleteDoc, getAllDocsByQuery, getDoc } from "../utils/HandlerFactory.js";
 
 export const addItem=catchAsync(async (req, res, next)=>{
     req.body.listedBy=req.user.id;
@@ -13,16 +14,42 @@ export const addItem=catchAsync(async (req, res, next)=>{
     })
 })
 
-export const getAllItems= getAllDocsByQuery(Item, {listedBy:{$ne:req.user.id}})
+export const getItem= getDoc(Item);
 
-export const getUserItems= getAllDocsByQuery(Item, {listedBy:req.user.id});
+export const getAllItems=catchAsync(async (req, res, next)=>{
+    const features = new APIFeatures(Item.find({listedBy:{$ne:req.user.id}}),req.query)
+
+    features.filter().sort().fields().paginator();
+    const docs = await features.query
+
+    res.status(200).json({
+        status: 'success',
+        results: docs.length,
+        requestedAt: req.requestedAt,
+        data: docs,
+    });
+})
+
+export const getUserItems=catchAsync(async (req, res, next)=>{
+    const features = new APIFeatures(Item.find({listedBy:req.user.id}),req.query)
+
+    features.filter().sort().fields().paginator();
+    const docs = await features.query
+
+    res.status(200).json({
+        status: 'success',
+        results: docs.length,
+        requestedAt: req.requestedAt,
+        data: docs,
+    });
+})
 
 export const updateItem= updateDoc(Item);
 
 export const deleteItem= deleteDoc(Item);
 
 export const placeBid=catchAsync(async(req,res,next)=>{
-    const bid = await Bid.find({placedBy:req.user.id, item:req.params.id})? await Bid.findOneAndUpdate({placedBy:req.user.id, item:req.params.id},{bid:req.body.bid}): await Bid.create({
+    const bid = (await Bid.findOne({placedBy:req.user.id, item:req.params.id})!=null)? await Bid.findOneAndUpdate({placedBy:req.user.id, item:req.params.id},{bid:req.body.bid},{new:true}): await Bid.create({
         placedBy:req.user.id,
         item:req.params.id,
         bid:req.body.bid,
