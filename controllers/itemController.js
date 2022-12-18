@@ -12,6 +12,21 @@ export const addItem=catchAsync(async (req, res, next)=>{
     })
 })
 
+export const placeBid=catchAsync(async(req,res,next)=>{
+    const item=await Item.findById(req.params.id)
+    const bid={
+        placedBy:req.user.id,
+        bid:req.body.bid,
+    }
+    item.bids.append(bid);
+    item.save();
+    res.status(200).json({
+        status:"success",
+        requestedAt: req.requestedAt,
+        data:item
+    })
+})
+
 export const getAllItems= getAllDocsByQuery(Item, {listedBy:{$ne:req.user.id}})
 
 export const getUserItems= getAllDocsByQuery(Item, {listedBy:req.user.id});

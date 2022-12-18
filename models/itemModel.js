@@ -8,9 +8,20 @@ const itemSchema= new mongoose.Schema({
         ref:'User'
     },
     listedAt:Date,
-    cost:Number,
+    leastAsked:Number,
     isPurchased:Boolean,
-    purchasedAt:Date
+    purchasedAt:Date,
+    bids:[{
+        placedBy:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        },
+        bid:Number,
+        placedAt:{
+            type:Date,
+            default:Date.now()
+        }
+    }]
 })
 
 const Item = mongoose.model("Item", itemSchema);
