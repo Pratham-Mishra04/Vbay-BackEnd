@@ -33,9 +33,6 @@ const userSchema = new mongoose.Schema({
         required:true,
         lowercase:true,
     },
-    bio:{
-        type:String,
-    },
     password:{
         type:String,
         select:false

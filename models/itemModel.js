@@ -12,16 +12,15 @@ const itemSchema= new mongoose.Schema({
     isPurchased:Boolean,
     purchasedAt:Date,
     bids:[{
-        placedBy:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'User'
-        },
-        bid:Number,
-        placedAt:{
-            type:Date,
-            default:Date.now()
-        }
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Bid'
     }]
+})
+
+itemSchema.virtual('bids',{
+    ref:'Bid',
+    foreignField:'item',
+    localField:'_id'
 })
 
 const Item = mongoose.model("Item", itemSchema);
