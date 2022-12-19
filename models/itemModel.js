@@ -13,6 +13,8 @@ const itemSchema= new mongoose.Schema({
         default:Date.now()
     },
     leastAsked:Number,
+    tags:[String],
+    category:String,
     isPurchased:{
         type:Boolean,
         default:false

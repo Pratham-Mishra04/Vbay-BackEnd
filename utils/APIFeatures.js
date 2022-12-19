@@ -5,6 +5,35 @@ class APIFeatures{
         this.queryStr=queryStr
     }
 
+    search(){
+        const search= this.queryStr.search?{
+            $or:[
+                {
+                    title:{
+                        $regex:this.queryStr.search,
+                        $options:'i'
+                    }
+                },
+                {
+                    tags:{    // given that tags is an array of strings
+                        $all:{
+                            $regex:this.queryStr.search,
+                            $options:'i'
+                        }
+                    }
+                },
+                {
+                    category:{
+                        $regex:this.queryStr.search,
+                        $options:'i'
+                    }
+                }
+            ]
+        }:{}
+        this.query=this.query.find(search)
+        return this
+    }
+
     filter(){
     const queryObj = {...this.queryStr}
     const exlcudeFields=['page', 'sort', 'limit', 'fields']
