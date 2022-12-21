@@ -15,7 +15,7 @@ export const createSendToken = (user, statusCode, res)=>{
         httpOnly:true
     };
 
-    if(envHandler("NODE_ENV")==="prod") cookieSettings.secure=true;
+    if(envHandler("ENVIRONMENT")==="prod") cookieSettings.secure=true;
 
     res.cookie('jwt', token, cookieSettings)
     res.status(statusCode).json({

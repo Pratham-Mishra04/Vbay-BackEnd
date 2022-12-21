@@ -20,9 +20,7 @@ const userSchema = new mongoose.Schema({
     profilePic:{
         type:String
     }, 
-    phoneNo:{
-        type:Number
-    },
+    phoneNo:Number,
     regno:String,
     username:{
         type:String,

@@ -27,7 +27,7 @@ app.use(ExpressMongoSanitize())
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-if(envHandler('NODE_ENV')=='dev') app.use(morgan("dev"))
+if(envHandler('ENVIRONMENT')=='dev') app.use(morgan("dev"))
 
 connectToDB()
 

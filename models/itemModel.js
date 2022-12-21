@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const itemSchema= new mongoose.Schema({
     title:String,
-    picture:String,
+    images:[String],
     description:String,
     listedBy:{
         type:mongoose.Schema.Types.ObjectId,
@@ -15,6 +15,7 @@ const itemSchema= new mongoose.Schema({
     leastAsked:Number,
     tags:[String],
     category:String,
+    quantity:Number,
     isPurchased:{
         type:Boolean,
         default:false

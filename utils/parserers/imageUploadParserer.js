@@ -1,13 +1,19 @@
 import multer from "multer";
-import multerFilter from "../multerConfigs/multerFilter.js";
-import multerDiskStorage from "../multerConfigs/multerDiskStorage.js";
+import { multerProfilePicFilter, multerProductImgFilter } from "../multerConfigs/multerFilter.js";
+import { multerProfilePicDiskStorage, multerProductImgDiskStorage } from "../multerConfigs/multerDiskStorage.js";
 
-const upload = multer({
-    fileFilter: multerFilter,
-    storage:multerDiskStorage("user"),
+const profilePicUpload = multer({
+    fileFilter: multerProfilePicFilter,
+    storage:multerProfilePicDiskStorage,
     limits:{fileSize:5*1024*1024}
-    });
+});
 
-const imageUploadParserer= upload.single('profilePic')
+const productImgUpload = multer({
+    fileFilter: multerProductImgFilter,
+    storage:multerProductImgDiskStorage,
+    limits:{fileSize:15*1024*1024}  // total size of all the images
+})
 
-export default imageUploadParserer;
+export const profilePicUploadParserer= profilePicUpload.single('profilePic')
+
+export const productImgUploadParserer= productImgUpload.any('image')

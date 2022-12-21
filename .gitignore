@@ -2,3 +2,5 @@
 /.env
 /public
 /logs/error.log
+/logs/newCategories.log
+/logs/newUsers.log

@@ -24,7 +24,7 @@ transports: [
     ),
     }),
     new winston.transports.File({
-        filename: 'newUsers/combined.log',
+        filename: 'logs/newUsers.log',
         level: 'info',
         format: winston.format.combine(
         winston.format.timestamp({
@@ -37,7 +37,7 @@ transports: [
     ),
     }),
     new winston.transports.File({
-        filename: 'newCategories/combined.log',
+        filename: 'logs/newCategories.log',
         level: 'info',
         format: winston.format.combine(
         winston.format.timestamp({
@@ -48,20 +48,7 @@ transports: [
         winston.format.prettyPrint(),
         winston.format.errors({ stack: true }),
     ),
-    }),
-    new winston.transports.File({
-        filename: 'logs/combined.log',
-        level: 'info',
-        format: winston.format.combine(
-        winston.format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss',
-        }),
-        winston.format.simple(),
-        winston.format.json(),
-        winston.format.prettyPrint(),
-        winston.format.errors({ stack: true }),
-    ),
-    }),
+    })
     ],
 });
 
