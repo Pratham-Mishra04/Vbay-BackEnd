@@ -15,7 +15,7 @@ const itemSchema= new mongoose.Schema({
     leastAsked:Number,
     tags:[String],
     category:String,
-    quantity:Number,
+    // quantity:Number,
     isPurchased:{
         type:Boolean,
         default:false

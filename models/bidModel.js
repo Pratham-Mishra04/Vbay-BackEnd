@@ -10,9 +10,9 @@ const bidSchema = new mongoose.Schema({
         ref:'Item'
     },
     bid:Number,
-    placedAt:{
-        type:Date,
-        default:Date.now()
+},{
+    timestamps:{
+        createdAt:'placedAt'
     }
 })
 
