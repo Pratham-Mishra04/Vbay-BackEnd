@@ -40,7 +40,6 @@ const joiUserUpdateSchema =Joi.object({
 
 export const joiUserCreateValidator = (async (req, res, next)=>{
     await joiUserCreateSchema.validateAsync(req.body).catch(error=>{
-        // or can add multer configs after the validation to avoid unsyncing the profile pics in case the validation fails
         if(req.file){   //or req.file
             const picPath = req.files['profilePic'][0].destination+'/'+req.files['profilePic'][0].filename;
             fs.unlinkSync(picPath, function(err){

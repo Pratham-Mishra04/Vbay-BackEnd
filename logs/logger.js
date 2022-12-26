@@ -52,7 +52,7 @@ transports: [
     ],
 });
 
-if (process.env.ENVIRONMENT !== 'prod') {
+if (process.env.NODE_ENV !== 'prod') {
     logger.add(
         new winston.transports.Console({
             format: winston.format.simple(),

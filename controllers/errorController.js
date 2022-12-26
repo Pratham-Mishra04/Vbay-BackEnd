@@ -34,14 +34,14 @@ const JoiErrorHandler= err=>{
 export const noURL=(err, req, res, next)=>{   
     err.statusCode= err.statusCode || 500;
     err.status= err.status || "error";
-    if(envHandler("ENVIRONMENT")==='dev'){
+    if(envHandler("NODE_ENV")==='dev'){
         res.status(err.statusCode).json({
             status:err.status,
             error:err,
             message:err.message,
             stack:err.stack
     })
-    } else if(envHandler("ENVIRONMENT")==='prod'){
+    } else if(envHandler("NODE_ENV")==='prod'){
         let error={...err};
         if(err.name==="CastError") error=CastErrorHandler(error)
         if(err.code===11000) error=DuplicateErrorHandler(error)
