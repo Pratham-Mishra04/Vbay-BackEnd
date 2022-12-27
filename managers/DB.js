@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { DEV_DATABASE_URL } from '../constants.js'
+import { DEV_DATABASE_URL } from '../constants/constants.js'
 import envHandler from './envHandler.js'
 
 const URL = envHandler("NODE_ENV")=="dev"?

@@ -1,4 +1,9 @@
 import Joi from 'joi'
+import catchAsync from '../../managers/catchAsync.js'
+import path from 'path'
+import fs from 'fs'
+
+const __dirname=path.resolve();
 
 const joiProductCreateSchema = Joi.object({
     title:Joi.string().required(),
@@ -7,7 +12,7 @@ const joiProductCreateSchema = Joi.object({
     listedBy:Joi.string().required(),
     listedAt:Joi.forbidden(),
     leastAsked:Joi.number().required(),
-    tags:Joi.array().items(Joi.string()).required(),
+    tags:Joi.array().items(Joi.string()),
     category:Joi.string().required(),
     isPurchased:Joi.forbidden(),
     purchasedAt:Joi.forbidden()
@@ -26,21 +31,22 @@ const joiProductUpdateSchema = Joi.object({
     purchasedAt:Joi.forbidden()
 })
 
-export const joiProductCreateValidator = (async (req, res, next)=>{
+export const joiProductCreateValidator = catchAsync((async (req, res, next)=>{
+    req.body.listedBy=req.user.id;
     await joiProductCreateSchema.validateAsync(req.body).catch(error=>{
         if(req.body.images){
-            req.body.images.forEach(loc=>{        
-                fs.unlinkSync(`public/products/images/${loc}`, function(err){
-                    next(err)
-                })
+            req.body.images.forEach(loc=>{
+                fs.unlink(`./public/products/images/${loc}`,function(err){
+                    if(err) return next(err);
+                });    
             })
         }
         return next(error)
     })
     next()
-})
+}))
 
-export const joiProductUpdateValidator = (async (req, res, next)=>{
+export const joiProductUpdateValidator = catchAsync((async (req, res, next)=>{
     await joiProductUpdateSchema.validateAsync(req.body).catch(error=>{
         if(req.body.images){
             req.body.images.forEach(loc=>{        
@@ -52,4 +58,4 @@ export const joiProductUpdateValidator = (async (req, res, next)=>{
         return next(error)
     })
     next()
-})
+}))

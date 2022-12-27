@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const itemSchema= new mongoose.Schema({
+const productSchema= new mongoose.Schema({
     title:String,
     images:[String],
     description:String,
@@ -23,12 +23,12 @@ const itemSchema= new mongoose.Schema({
     purchasedAt:Date
 })
 
-itemSchema.virtual('bids',{
+productSchema.virtual('bids',{
     ref:'Bid',
-    foreignField:'item',
+    foreignField:'product',
     localField:'_id'
 })
 
-const Item = mongoose.model("Item", itemSchema);
+const Product = mongoose.model("Product", productSchema);
 
-export default Item;
+export default Product;

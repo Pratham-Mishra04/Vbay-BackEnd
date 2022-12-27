@@ -1,63 +1,43 @@
 import winston from "winston";
 
-const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.combine(
-        winston.format.simple(),
-        winston.format.colorize(),
-        winston.format.prettyPrint(),
-        winston.format.errors({ stack: true }),
-    ),
-
-transports: [
-    new winston.transports.File({
-    filename: 'logs/error.log',
-    level: 'error',
-    format: winston.format.combine(
-        winston.format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss',
-        }),
-        winston.format.simple(),
-        winston.format.json(),
-        winston.format.prettyPrint(),
-        winston.format.errors({ stack: true }),
-    ),
+const formatconfig =  winston.format.combine(
+    winston.format.timestamp({
+        format: 'YYYY-MM-DD HH:mm:ss',
     }),
-    new winston.transports.File({
-        filename: 'logs/newUsers.log',
-        level: 'info',
-        format: winston.format.combine(
-        winston.format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss',
-        }),
-        winston.format.simple(),
-        winston.format.json(),
-        winston.format.prettyPrint(),
-        winston.format.errors({ stack: true }),
-    ),
-    }),
-    new winston.transports.File({
-        filename: 'logs/newCategories.log',
-        level: 'info',
-        format: winston.format.combine(
-        winston.format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss',
-        }),
-        winston.format.simple(),
-        winston.format.json(),
-        winston.format.prettyPrint(),
-        winston.format.errors({ stack: true }),
-    ),
-    })
-    ],
-});
+    winston.format.simple(),
+    winston.format.json(),
+    winston.format.prettyPrint(),
+    winston.format.errors({ stack: true }),
+);
 
-if (process.env.NODE_ENV !== 'prod') {
-    logger.add(
-        new winston.transports.Console({
-            format: winston.format.simple(),
-        }),
-    );
+const createLog = (filename, level) =>{
+    return winston.createLogger({
+        transports: [
+            new winston.transports.File({
+            filename: `logs/${filename}.log`,
+            level: level,
+            format: formatconfig,
+            })
+        ]
+    });
+}
+
+const errorLogger = createLog('error', 'error')
+
+const infoLogger = createLog('info', 'info')
+
+const newCategoryLogger = createLog('newCategories', 'warn')
+
+const logger = {
+    info:(log)=>{
+        return infoLogger.info(log)
+    },
+    error:(log)=>{
+        return errorLogger.error(log)
+    },
+    newCategory:(log)=>{
+        return newCategoryLogger.warn(log)
+    }
 }
 
 export default logger

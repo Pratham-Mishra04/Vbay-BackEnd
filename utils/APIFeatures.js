@@ -15,7 +15,7 @@ class APIFeatures{
                     }
                 },
                 {
-                    tags:{    // given that tags is an array of strings
+                    tags:{
                         $all:{
                             $regex:this.queryStr.search,
                             $options:'i'

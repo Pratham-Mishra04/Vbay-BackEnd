@@ -11,7 +11,7 @@ const joiUserCreateSchema = Joi.object({
     username: Joi.string().custom(async (value, helper)=>{
         if(await User.find({username: value})) return helper.message("User with this username already exists")
     }).required(),
-    regNo:Joi.string().regex(/\d{2}\w{3}\d{4}/).custom(async (value, helper)=>{
+    regNo:Joi.string().regex(/\d{2}\w{3}\d{4}/i).custom(async (value, helper)=>{
         if(await User.find({regNo: value})) return helper.message("User with this Registration Number already exists")
     }).required(),
     profilePic:Joi.string().required(),
@@ -47,7 +47,7 @@ const joiUserUpdateSchema =Joi.object({
     passwordResetTokenExpiresIn:Joi.forbidden()
 })
 
-export const joiUserCreateValidator = (async (req, res, next)=>{
+export const joiUserCreateValidator = catchAsync((async (req, res, next)=>{
     await joiUserCreateSchema.validateAsync(req.body).catch(error=>{
         if(req.file){
             const picPath = req.file.destination+'/'+req.file.filename;
@@ -58,9 +58,9 @@ export const joiUserCreateValidator = (async (req, res, next)=>{
         return next(error)
     })
     next()
-})
+}))
 
-export const joiUserUpdateValidator = (async (req, res, next)=>{
+export const joiUserUpdateValidator = catchAsync((async (req, res, next)=>{
     await joiUserUpdateSchema.validateAsync(req.body).catch(error=>{
         if(req.file){
             const picPath = req.file.destination+'/'+req.file.filename;
@@ -71,4 +71,4 @@ export const joiUserUpdateValidator = (async (req, res, next)=>{
         return next(error)
     })
     next()
-})
+}))

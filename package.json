@@ -33,6 +33,7 @@
     "sharp": "^0.30.7",
     "slugify": "^1.6.5",
     "validator": "^13.7.0",
-    "winston": "^3.8.2"
+    "winston": "^3.8.2",
+    "winston-transport": "^4.5.0"
   }
 }

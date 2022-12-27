@@ -17,7 +17,7 @@ export const multerProductImgDiskStorage = multer.diskStorage({   // convert thi
         callback(null, `./public/products/images`)
     },
     filename: function(req, file, callback) {
-        const name=`${req.user.username}-${req.body.title}-${Date.now()}`+ path.extname(file.originalname);
+        const name=`${req.user.username}-${req.body.title}-${Math.random()*1000}`+ path.extname(file.originalname);
         try{
             req.body.images.push(name)
         }catch(err){

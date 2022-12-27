@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import AppError from "../managers/AppError.js";
 import User from "../models/userModel.js";
-import Item from "../models/itemModel.js";
+import Product from "../models/productModel.js";
 import { promisify } from "util";
 import catchAsync from "../managers/catchAsync.js";
 import envHandler from '../managers/envHandler.js';
@@ -23,8 +23,8 @@ export const protect = catchAsync(async (req, res, next)=>{
     next()
 })
 
-export const userItemProtect=catchAsync(async(req, res, next)=>{
-    const item= await Item.findById(req.params.id);
+export const userProductProtect=catchAsync(async(req, res, next)=>{
+    const item= await Product.findById(req.params.id);
     if(req.user.id!=item.listedBy) return next(AppError("You do not have the permission to perform this action", 403));
     next()
 })
