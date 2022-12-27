@@ -45,7 +45,20 @@ export const getUserProducts=catchAsync(async (req, res, next)=>{
 
 export const updateProduct= updateDoc(Product);
 
-export const deleteProduct= deleteDoc(Product);
+export const deleteProduct= catchAsync(async(req, res, next)=>{
+    const product = await Product.findById(req.params.id);
+    product.images.forEach(loc=>{
+        fs.unlink(`./public/products/images/${loc}`,function(err){
+            if(err) return next(err);
+        }); 
+    })
+    await product.delete();
+    res.status(204).json({
+        status:"success",
+        requestedAt: req.requestedAt,
+        data:null
+    })
+})
 
 export const placeBid=catchAsync(async(req,res,next)=>{
     const bid = (await Bid.findOne({placedBy:req.user.id, item:req.params.id})!=null)? await Bid.findOneAndUpdate({placedBy:req.user.id, item:req.params.id},{bid:req.body.bid},{new:true}): await Bid.create({

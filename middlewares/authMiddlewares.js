@@ -5,6 +5,7 @@ import Product from "../models/productModel.js";
 import { promisify } from "util";
 import catchAsync from "../managers/catchAsync.js";
 import envHandler from '../managers/envHandler.js';
+import logger from '../logs/logger.js';
 
 export const protect = catchAsync(async (req, res, next)=>{
     let token;
@@ -15,7 +16,10 @@ export const protect = catchAsync(async (req, res, next)=>{
     const decoded= await promisify(jwt.verify)(token, envHandler("JWT_KEY"))
     const user= await User.findById(decoded.id)
 
-    if(req.params.userID && decoded.id!=req.params.userID) return next(new AppError("Please Login in as the Modifying User.", 401))
+    if(req.params.userID && decoded.id!=req.params.userID){
+        logger.protect(`Non-modifying user entry attempt. \nAttempting User: ${decoded.id}\nTrying to access: ${req.user.userID}\nAction: ${req.originalUrl}`);
+        return next(new AppError("Please Login in as the Modifying User.", 401))
+    }
     if(!user) return next(new AppError("User of this token no longer exists", 401))
     if(user.changedPasswordAfter(decoded.iat)) return next(new AppError("Password was recently changed. Please Login again", 401))
 
@@ -25,7 +29,10 @@ export const protect = catchAsync(async (req, res, next)=>{
 
 export const userProductProtect=catchAsync(async(req, res, next)=>{
     const item= await Product.findById(req.params.id);
-    if(req.user.id!=item.listedBy) return next(AppError("You do not have the permission to perform this action", 403));
+    if(req.user.id!=item.listedBy){
+        logger.protect(`Non-modifying user entry attempt. \nAttempting User: ${decoded.id}\nTrying to access: ${req.user.userID}\nAction: ${req.originalUrl}`);
+        return next(AppError("You do not have the permission to perform this action", 403));
+    }
     next()
 })
 

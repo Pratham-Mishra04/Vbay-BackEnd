@@ -1,16 +1,13 @@
 import catchAsync from "../managers/catchAsync.js";
-import fs from 'fs'
 import logger from "../logs/logger.js";
-import { CATEGORY_URL } from "../constants/constants.js";
+import Category from "../models/categoryModel.js"
 
-const categoryCheck = (req, res, next)=>{
-    const categories = fs.readFileSync(CATEGORY_URL).toString().split(' ');
-    if(!categories.includes(req.body.category)){
-        logger.newCategory(`New Category Added: ${req.body.category} by ${req.user.username} for ${req.body.title}`)
-        categories.push(req.body.category)
-        fs.writeFileSync(CATEGORY_URL, categories.join(' '))
-    }
+const categoryCheck = catchAsync(async(req, res, next)=>{
+    if(!await Category.findOne({title:{$regex:`^${req.body.category}$`, $options:'i'}}))
+        await Category.create({title:req.body.category})
+                .then(logger.newCategory(`New Category Added: ${req.body.category} by ${req.user.username} for ${req.body.title}`))
+                .catch(err=>logger.error(`Error in creating new category: ${req.body.category} by ${req.user.username} for ${req.body.title}\n${err.message}`))
     next()
-}
+})
 
 export default categoryCheck;

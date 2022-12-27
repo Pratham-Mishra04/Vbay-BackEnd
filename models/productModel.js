@@ -29,6 +29,8 @@ productSchema.virtual('bids',{
     localField:'_id'
 })
 
+productSchema.index({'leastAsked':1})
+
 const Product = mongoose.model("Product", productSchema);
 
 export default Product;

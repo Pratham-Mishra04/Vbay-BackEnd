@@ -28,15 +28,20 @@ const infoLogger = createLog('info', 'info')
 
 const newCategoryLogger = createLog('newCategories', 'warn')
 
+const protectLogger = createLog('protect', 'warn')
+
 const logger = {
-    info:(log)=>{
+    info:log=>{
         return infoLogger.info(log)
     },
-    error:(log)=>{
+    error:log=>{
         return errorLogger.error(log)
     },
-    newCategory:(log)=>{
+    newCategory:log=>{
         return newCategoryLogger.warn(log)
+    },
+    protect:log=>{
+        return protectLogger.warn(log)
     }
 }
 
