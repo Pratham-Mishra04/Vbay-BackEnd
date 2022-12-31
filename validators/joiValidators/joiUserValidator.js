@@ -2,17 +2,21 @@ import Joi from 'joi'
 import User from '../../models/userModel.js';
 import catchAsync from '../../managers/catchAsync.js'
 import { isValidNumber } from 'libphonenumber-js';
+import fs from 'fs'
 
 const joiUserCreateSchema = Joi.object({
     name:Joi.string().pattern(/^[A-Za-z]+$/, 'alpha').required(),
     email:Joi.string().email().lowercase().custom(async (value, helper)=>{
-        if(await User.find({email: value})) return helper.message("User with this email already exists")
+        if(await User.findOne({email: value})){
+            console.log("here")
+            return helper.message("User with this email already exists") // NOT WORKING
+        }
     }).required(),
     username: Joi.string().custom(async (value, helper)=>{
-        if(await User.find({username: value})) return helper.message("User with this username already exists")
+        if(await User.findOne({username: value})) return helper.message("User with this username already exists")
     }).required(),
     regNo:Joi.string().regex(/\d{2}\w{3}\d{4}/i).custom(async (value, helper)=>{
-        if(await User.find({regNo: value})) return helper.message("User with this Registration Number already exists")
+        if(await User.findOne({regNo: value})) return helper.message("User with this Registration Number already exists")
     }).required(),
     profilePic:Joi.string().required(),
     password:Joi.string().min(8).required(),
@@ -31,7 +35,7 @@ const joiUserUpdateSchema =Joi.object({
     name:Joi.forbidden(),
     email:Joi.forbidden(),
     username: Joi.string().custom(async (value, helper)=>{
-        if(await User.find({username: value})) return helper.message("User with this username already exists")
+        if(await User.findOne({username: value})) return helper.message("User with this username already exists")
     }).required(),
     regNo:Joi.forbidden(),
     profilePic:Joi.string(),
@@ -55,8 +59,10 @@ export const joiUserCreateValidator = catchAsync((async (req, res, next)=>{
                 return next(err)
             })
         }
+        console.log("here")
         return next(error)
     })
+    console.log("No Error")
     next()
 }))
 

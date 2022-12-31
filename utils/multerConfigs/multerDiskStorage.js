@@ -1,7 +1,7 @@
 import path from 'path'
 import multer from 'multer';
 
-export const multerProfilePicDiskStorage = multer.diskStorage({   // convert this into single-files
+export const multerProfilePicDiskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, `./public/users/profilePics`)
     },
@@ -12,7 +12,7 @@ export const multerProfilePicDiskStorage = multer.diskStorage({   // convert thi
     }
 })
 
-export const multerProductImgDiskStorage = multer.diskStorage({   // convert this into multi-files
+export const multerProductImgDiskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, `./public/products/images`)
     },

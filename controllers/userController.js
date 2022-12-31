@@ -3,10 +3,6 @@ import AppError from "../managers/AppError.js";
 import catchAsync from "../managers/catchAsync.js";
 import { getAllDocs, getDoc, updateDoc } from "../utils/HandlerFactory.js";
 import sendEmail from "../utils/Email.js";
-import envHandler from "../managers/envHandler.js";
-
-// export const uploadProficPic = uploadPic("profilePic");
-// export const resizeUserPic = resizePic("project", 500, 500);
 
 export const getAllUsers=getAllDocs(User);
 
@@ -23,7 +19,7 @@ export const deleteUser = catchAsync(async (req, res, next)=>{
     })
 })
 
-export const UpdatePassword= catchAsync(async (req, res, next)=>{
+export const updatePassword= catchAsync(async (req, res, next)=>{
     const user=await User.findById(req.user.id).select("+password");
     if(! await user.correctPassword(req.body.password, user.password)) return next(new AppError("Incorect Password, Please enter the corrent password", 401));
     
