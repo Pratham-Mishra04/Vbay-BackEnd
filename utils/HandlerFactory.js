@@ -19,7 +19,6 @@ export const getAllDocs = Model => catchAsync(async (req, res, next)=>{
 })
 
 export const getAllDocsByQuery = (Model, query) => catchAsync(async (req, res, next)=>{
-    const userID=req.user.id;
     const features = new APIFeatures(Model.find(query),req.query)
 
     features.filter().sort().fields().paginator();

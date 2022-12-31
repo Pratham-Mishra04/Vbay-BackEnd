@@ -14,8 +14,7 @@ const joiProductCreateSchema = Joi.object({
     leastAsked:Joi.number().required(),
     tags:Joi.array().items(Joi.string()),
     category:Joi.string().required(),
-    isPurchased:Joi.forbidden(),
-    purchasedAt:Joi.forbidden()
+    purchaseHistory:Joi.forbidden()
 })
 
 const joiProductUpdateSchema = Joi.object({
@@ -27,8 +26,7 @@ const joiProductUpdateSchema = Joi.object({
     leastAsked:Joi.number(),
     tags:Joi.array().items(Joi.string()),
     category:Joi.string(),
-    isPurchased:Joi.forbidden(),
-    purchasedAt:Joi.forbidden()
+    purchaseHistory:Joi.forbidden()
 })
 
 export const joiProductCreateValidator = catchAsync((async (req, res, next)=>{

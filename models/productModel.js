@@ -16,11 +16,17 @@ const productSchema= new mongoose.Schema({
     tags:[String],
     category:String,
     // quantity:Number,
-    isPurchased:{
-        type:Boolean,
-        default:false
-    },
-    purchasedAt:Date
+    purchaseHistory:{
+        isPurchased:{
+            type:Boolean,
+            default:false
+        },
+        purchasedAt:Date,
+        purchasedBy:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'User'
+        }
+    }
 })
 
 productSchema.virtual('bids',{
