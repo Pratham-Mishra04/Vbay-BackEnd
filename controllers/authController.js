@@ -17,7 +17,7 @@ export const createSendToken = (user, statusCode, res)=>{
 
     if(envHandler("NODE_ENV")==="prod") cookieSettings.secure=true;
 
-    res.cookie('jwt', token, cookieSettings)
+    res.cookie('token', token, cookieSettings)
     res.status(statusCode).json({
         status:"success",
         token:token,
@@ -42,7 +42,7 @@ export const login = catchAsync(async (req,res, next)=>{
 
 export const logout = catchAsync(async (req, res, next)=>{
     res.cookie('jwt', 'loggedout', {
-        expires: new Date(Date.now()+ 10*1000),
+        expires: new Date(Date.now()+ 1*1000),
         httpOnly: true
     });
     res.status(200).json({
