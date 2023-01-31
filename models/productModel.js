@@ -1,42 +1,42 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const productSchema= new mongoose.Schema({
-    title:String,
-    images:[String],
-    description:String,
-    listedBy:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'User'
+const productSchema = new mongoose.Schema({
+  title: String,
+  images: [String],
+  description: String,
+  listedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  listedAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  leastAsked: Number,
+  tags: [String],
+  category: String,
+  // quantity:Number,
+  purchaseHistory: {
+    isPurchased: {
+      type: Boolean,
+      default: false,
     },
-    listedAt:{
-        type:Date,
-        default:Date.now()
+    purchasedAt: Date,
+    purchasedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
-    leastAsked:Number,
-    tags:[String],
-    category:String,
-    // quantity:Number,
-    purchaseHistory:{
-        isPurchased:{
-            type:Boolean,
-            default:false
-        },
-        purchasedAt:Date,
-        purchasedBy:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:'User'
-        }
-    }
-})
+  },
+});
 
-productSchema.virtual('bids',{
-    ref:'Bid',
-    foreignField:'product',
-    localField:'_id'
-})
+productSchema.virtual('bids', {
+  ref: 'Bid',
+  foreignField: 'product',
+  localField: '_id',
+});
 
-productSchema.index({'leastAsked':1})
+productSchema.index({ leastAsked: 1 });
 
-const Product = mongoose.model("Product", productSchema);
+const Product = mongoose.model('Product', productSchema);
 
 export default Product;
