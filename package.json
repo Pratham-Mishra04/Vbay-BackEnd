@@ -1,18 +1,17 @@
 {
-  "name": "vbay",
+  "name": "vbay_backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "nodemon index.js",
-    "dev": "nodemon index.js",
-    "lint": "eslint --fix --ext .js"
-  },
   "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "lint": "eslint --fix --ext .ts"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
@@ -22,26 +21,32 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "libphonenumber-js": "^1.10.11",
-    "moment": "^2.29.4",
     "mongoose": "^6.4.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
-    "node-fetch": "^3.2.10",
-    "node-schedule": "^2.1.0",
-    "nodemailer": "^6.7.7",
-    "nodemailer-express-handlebars": "^5.0.0",
-    "nodemon": "^2.0.20",
     "sharp": "^0.30.7",
     "slugify": "^1.6.5",
-    "validator": "^13.7.0",
     "winston": "^3.8.2",
     "winston-transport": "^4.5.0"
   },
   "devDependencies": {
-    "eslint": "^8.33.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.8.3"
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/express-mongo-sanitize": "^2.1.0",
+    "@types/helmet": "^4.0.0",
+    "@types/joi": "^17.2.3",
+    "@types/jsonwebtoken": "^9.0.1",
+    "@types/morgan": "^1.9.4",
+    "@types/multer": "^1.4.7",
+    "@types/node": "^18.13.0",
+    "@types/sharp": "^0.31.1",
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
+    "eslint": "^8.34.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.3",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.9.5"
   }
 }
