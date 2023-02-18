@@ -6,8 +6,8 @@ import {
   getProduct,
   updateProduct,
 } from '../controllers/productController';
-import { productImgUploadParserer } from '../utils/parserers/imageUploadParserer';
-import { resizeProductPics } from '../utils/resizePic';
+import { productImgUploadParserer } from '../utils/imageProcessing/parserers/imageUploadParserer';
+import { resizeProductPics } from '../utils/imageProcessing/resizePic';
 import categoryCheck from '../validators/categoryChecker';
 import {
   joiProductCreateValidator,

@@ -11,8 +11,8 @@ import {
   joiUserCreateValidator,
   joiUserUpdateValidator,
 } from '../validators/joiValidators/joiUserValidator';
-import { profilePicUploadParserer } from '../utils/parserers/imageUploadParserer';
-import { resizeProfilePic } from '../utils/resizePic';
+import { profilePicUploadParserer } from '../utils/imageProcessing/parserers/imageUploadParserer';
+import { resizeProfilePic } from '../utils/imageProcessing/resizePic';
 
 const userRouter = express.Router();
 

@@ -1,4 +1,4 @@
-import AppError from '../../managers/AppError';
+import AppError from '../../../managers/AppError';
 
 export const multerProfilePicFilter = (req, file, cb) => {
   // runs for each file

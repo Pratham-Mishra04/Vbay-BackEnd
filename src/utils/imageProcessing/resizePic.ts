@@ -1,7 +1,7 @@
 import * as sharp from 'sharp';
 import * as fs from 'fs';
 import slugify from 'slugify';
-import logger from '../../logs/logger';
+import logger from '../../../logs/logger';
 import { NextFunction, Request, Response } from 'express';
 
 export const resizePic = async (picPath:string, toPath:string, d1:number, d2:number): Promise<void> => {
