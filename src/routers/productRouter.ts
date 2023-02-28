@@ -16,21 +16,19 @@ import {
 
 const productRouter = express.Router();
 
-productRouter
-  .route('/')
-  .post(
-    protect,
-    productImgUploadParserer,
-    joiProductCreateValidator,
-    resizeProductPics,
-    categoryCheck,
-    addProduct
-  );
+productRouter.route('/').post(
+  protect,
+  productImgUploadParserer,
+  joiProductCreateValidator,
+  resizeProductPics,
+  categoryCheck,
+  addProduct
+);
 
 productRouter
   .route('/:id')
-  .get(protect, getProduct)
-  .patch(protect, userProductProtect, joiProductUpdateValidator, updateProduct)
+  .get(getProduct)
+  .patch(protect, userProductProtect, productImgUploadParserer, joiProductUpdateValidator, resizeProductPics, updateProduct)
   .delete(protect, userProductProtect, deleteProduct);
 
 export default productRouter;

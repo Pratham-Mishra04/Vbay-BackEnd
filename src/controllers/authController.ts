@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import * as jwt from 'jsonwebtoken';
 import User, { UserDocument } from '../models/userModel';
 import AppError from '../managers/AppError';
@@ -7,13 +8,13 @@ import { Response, Request, NextFunction } from 'express';
 
 export const createSendToken = (user:UserDocument, statusCode:number, res:Response) => {
   const token = jwt.sign({ id: user._id }, envHandler('JWT_KEY'), {
-    expiresIn: envHandler('JWT_TIME') * 24 * 60,
+    expiresIn: Number(envHandler('JWT_TIME')) * 24 * 60,
   });
   user.password = undefined;
 
   const cookieSettings = {
     expires: new Date(
-      Date.now() + envHandler('JWT_TIME') * 24 * 60 * 60 * 1000
+      Date.now() + Number(envHandler('JWT_TIME')) * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
     secure:false
@@ -25,7 +26,7 @@ export const createSendToken = (user:UserDocument, statusCode:number, res:Respon
   res.status(statusCode).json({
     status: 'success',
     token,
-    data:user
+    user
   });
 };
 
@@ -35,12 +36,14 @@ export const signup = catchAsync(async (req:Request, res:Response, next:NextFunc
 });
 
 export const login = catchAsync(async (req:Request, res:Response, next:NextFunction) => {
-  const { email, password } = req.body;
-  if (!email || !password)
-    return next(new AppError("Email or Password doesn't exists", 400));
-  const user = await User.findOne({ email }).select('+password');
-  if (!user || !(await user.correctPassword(password, user.password)))
-    throw new AppError('Incorrect Email or Password', 400);
+  const { username, password } = req.body;
+
+  if (!username || !password)
+    return next(new AppError("Username or Password doesn't exists", 400));
+  const user = await User.findOne({ username });
+
+  if (!user || !(await user.correctPassword(password)))
+    throw new AppError('Incorrect Username or Password', 400);
   createSendToken(user, 200, res);
 });
 

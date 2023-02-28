@@ -55,7 +55,7 @@ export const protect = catchAsync(async (req:Request, res:Response, next:NextFun
 
 export const userProductProtect = catchAsync(async (req:Request, res:Response, next:NextFunction) => {
   const item = await Product.findById(req.params.id);
-  if (req.user.id !== item.listedBy) {
+  if (req.user.id !== item.listedBy.toString()) {
     logger.protect(
       `Non-modifying user entry attempt. \nAttempting User: ${req.user.id}\nTrying to access: ${item.listedBy}\nAction: ${req.originalUrl}`
     );

@@ -15,7 +15,7 @@ const bidSchema = new mongoose.Schema(
     },
     product: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Item',
+      ref: 'Product',
     },
     bid: Number,
   },

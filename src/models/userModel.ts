@@ -81,7 +81,8 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.methods.correctPassword = async function (inPass:string):Promise<boolean> {
-  const user=this as UserDocument // or you can just use this like in save
+  const user = await User.findById(this.id).select("+password")
+
   return await bcrypt.compare(inPass, user.password);
 };
 

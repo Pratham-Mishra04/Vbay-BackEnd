@@ -1,6 +1,7 @@
 import * as Joi from 'joi';
 import * as fs from 'fs';
 import catchAsync from '../../managers/catchAsync';
+import Product from '../../models/productModel';
 
 const joiProductCreateSchema = Joi.object({
   title: Joi.string().required(),
@@ -8,10 +9,13 @@ const joiProductCreateSchema = Joi.object({
   description: Joi.string(),
   listedBy: Joi.string().required(),
   listedAt: Joi.forbidden(),
+  mrp: Joi.number(),
+  age: Joi.number(),
   leastAsked: Joi.number().required(),
   tags: Joi.array().items(Joi.string()),
   category: Joi.string().required(),
   purchaseHistory: Joi.forbidden(),
+  estimatedPrice: Joi.forbidden()
 });
 
 const joiProductUpdateSchema = Joi.object({
@@ -21,6 +25,8 @@ const joiProductUpdateSchema = Joi.object({
   listedBy: Joi.forbidden(),
   listedAt: Joi.forbidden(),
   leastAsked: Joi.number(),
+  mrp: Joi.forbidden(),
+  age: Joi.forbidden(),
   tags: Joi.array().items(Joi.string()),
   category: Joi.string(),
   purchaseHistory: Joi.forbidden(),
@@ -50,5 +56,11 @@ export const joiProductUpdateValidator = catchAsync(async (req, res, next) => {
     }
     return next(error);
   });
+  if(req.body.images){
+    const product = await Product.findById(req.params.id)
+    product.images.forEach((loc:string) => {
+      fs.unlinkSync(`public/${loc}`);
+    });
+  }
   next();
 });

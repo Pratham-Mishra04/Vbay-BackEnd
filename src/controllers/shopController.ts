@@ -84,30 +84,33 @@ export const markPurchased = catchAsync(async (req:Request, res:Response, next:N
 
 export const placeBid = catchAsync(async (req:Request, res:Response, next:NextFunction) => {
   const bid =
-    (await Bid.findOne({ placedBy: req.user.id, item: req.params.id })) != null
+    (await Bid.findOne({ placedBy: req.user.id, product: req.params.id })) != null
       ? await Bid.findOneAndUpdate(
-          { placedBy: req.user.id, item: req.params.id },
+          { placedBy: req.user.id, product: req.params.id },
           { bid: req.body.bid },
           { new: true }
         )
       : await Bid.create({
           placedBy: req.user.id,
-          item: req.params.id,
+          product: req.params.id,
           bid: req.body.bid,
         });
+
+    const bids = await Bid.find({product:req.params.id}).populate('placedBy', 'username')
 
   res.status(200).json({
     status: 'success',
     requestedAt: req.requestedAt,
-    data: bid,
+    bids
   });
 });
 
 export const deleteBid = catchAsync(async (req:Request, res:Response, next:NextFunction) => {
-  await Bid.findOneAndDelete({ placedBy: req.user.id, item: req.params.id });
-  res.status(204).json({
+  await Bid.findOneAndDelete({ placedBy: req.user.id, product: req.params.id });
+  const bids = await Bid.find({product:req.params.id}).populate('placedBy', 'username')
+  res.status(200).json({
     status: 'success',
     requestedAt: req.requestedAt,
-    data: null,
+    bids:bids?bids:[]
   });
 });

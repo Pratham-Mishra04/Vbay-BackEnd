@@ -18,27 +18,32 @@ class APIFeatures<T> {
   }
 
   search(): this {
+    const searchStr = this.queryStr.search || '';
+
+    const regexArry = [];
+
+    regexArry.push(new RegExp(searchStr, 'i'));
+    regexArry.push(new RegExp(searchStr.replace(' ', ''), 'i'));
+
     const search = this.queryStr.search
       ? {
           $or: [
             {
               title: {
-                $regex: this.queryStr.search,
-                $options: 'i',
+                $in: regexArry,
               },
             },
-            {
-              tags: {
-                $all: {
-                  $regex: this.queryStr.search,
-                  $options: 'i',
-                },
-              },
+            { tags: 
+              { $elemMatch: 
+                { 
+                  $in: regexArry
+                  // $regex: searchStr  
+                } 
+              } 
             },
             {
               category: {
-                $regex: this.queryStr.search,
-                $options: 'i',
+                $in: regexArry,
               },
             },
           ],

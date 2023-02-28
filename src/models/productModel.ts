@@ -13,13 +13,14 @@ export interface ProductDocument extends Document {
   description: string;
   listedBy: mongoose.Schema.Types.ObjectId;
   mrp: number;
-  estimatedPrice: number;
+  estimatedPrice?: number;
   age: number;
   leastAsked: number;
   tags: string[];
   category: string;
   listedAt: Date;
   purchaseHistory: PurchaseHistory;
+  bids: mongoose.Schema.Types.ObjectId[];
 }
 
 const productSchema: Schema = new mongoose.Schema({
@@ -52,7 +53,6 @@ const productSchema: Schema = new mongoose.Schema({
   },
   estimatedPrice: {
     type: Number,
-    required: true,
   },
   age: {
     type: Number,
@@ -87,6 +87,13 @@ const productSchema: Schema = new mongoose.Schema({
       default: null,
     },
   },
+},{
+  toJSON:{
+    virtuals:true
+  },
+  toObject:{
+    virtuals:true
+  }
 });
 
 productSchema.virtual('bids', {

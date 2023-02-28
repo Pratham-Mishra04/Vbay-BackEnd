@@ -22,7 +22,7 @@ app.use(cors());
 app.use(helmet());
 app.use(ExpressMongoSanitize());
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 if (envHandler('NODE_ENV') === 'dev') app.use(morgan('dev'));
 
@@ -38,7 +38,7 @@ app.use((req:Request, res:Response, next:NextFunction) => {
 });
 
 app.use('/users', userRouter);
-app.use('/items', productRouter);
+app.use('/products', productRouter);
 app.use('/shop', shopRouter);
 
 app.all('*', (req:Request, res:Response, next:NextFunction) => {
